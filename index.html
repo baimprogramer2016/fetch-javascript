@@ -17,14 +17,20 @@
       <button class="btn btn-primary text-white" id="btnSingle">
         Fetch Single
       </button>
-      <button class="btn btn-primary text-white" id="btnMulti">
+      <button class="btn btn-success text-white" id="btnMulti">
         Fetch Multi
       </button>
-      <button class="btn btn-primary text-white" id="btnPost">
+      <button class="btn btn-secondary text-white" id="btnPost">
         Post Data
       </button>
+      <button class="btn btn-info text-white" id="btnUpdate">
+        Update Data
+      </button>
+      <button class="btn btn-danger text-white" id="btnDelete">
+        Delete Data
+      </button>
 
-      <h1 class="mt-2">Title</h1>
+      <h1 class="mt-2">Fetch Example </h1>
       <p>
         <div class="list-group" id="output">            
             <div class="card mt-1" >
@@ -48,6 +54,12 @@
     document.getElementById('btnSingle').addEventListener('click',fetchSingle);
     document.getElementById('btnMulti').addEventListener('click',fetchMulti);
     document.getElementById('btnPost').addEventListener('click',postData);
+    document.getElementById('btnUpdate').addEventListener('click',function(){
+        putData(2);
+    });
+    document.getElementById('btnDelete').addEventListener('click', function(){
+        deleteData(3);
+    });
 
 
     function fetchSingle()
@@ -59,7 +71,7 @@
             output = "<div class='card'><div class='card-body'><b>"+result.title.substring(0,10)+"</b><p>"+result.body+"</p></div></div>";
 
             document.getElementById('output').innerHTML = output;
-        })
+        }).catch((error) => console.log(error));
     }
 
     function fetchMulti()
@@ -75,7 +87,7 @@
 
             document.getElementById('output').innerHTML = output;
             
-        })
+        }).catch((error) => console.log(error));
     }
 
     function postData()
@@ -97,7 +109,42 @@
             
             output = "<div class='card'><div class='card-body'><b>"+result.title.substring(0,10)+"</b><p>"+result.body+"</p></div></div>";
             document.getElementById('output').innerHTML = output;
-        })       
+        }).catch((error) => console.log(error));
+    }
+
+    function putData(paramId)
+    {
+        document.getElementById('output').innerHTML = '<center>Loading...</center>';
+        fetch('https://jsonplaceholder.typicode.com/posts/' +paramId,
+        {
+            method: 'PUT',
+            headers:{
+                'Accept' : 'application/json',
+                'Content-Type' : 'application/json'
+            },
+            body : JSON.stringify({
+                title : 'Title Berubah',
+                body: 'Data Sudah berubah'
+             })
+        }).then((response) => response.json())
+        .then((result) => {
+            output = "<div class='card'><div class='card-body'><b>"+result.title.substring(0,100)+"</b><p>"+result.body+"</p></div></div>";
+            document.getElementById('output').innerHTML = output;
+        }
+        )
+    }
+
+    function deleteData(paramId)
+    {
+        document.getElementById('output').innerHTML = '<center>Loading...</center>';
+        fetch('https://jsonplaceholder.typicode.com/posts/' +paramId,{
+            method:'DELETE',
+        })
+        .then((response) => response.json())
+        .then((result) => {
+            output = "<div class='card'><div class='card-body'><p>Data Telah Di Hapus</p></div></div>";
+            document.getElementById('output').innerHTML = output;
+        })
     }
 
 </script>
